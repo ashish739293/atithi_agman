@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
 
 // Define request schema for validation
 const schema = yup.object().shape({
-    email: yup.string().required("Email is required"),
+    username: yup.string().required("username is required"),
     password: yup.string().required("Password is required"),
     long_live_token: yup.string().oneOf(['0', '1']).notRequired()
 });
@@ -24,10 +24,10 @@ export async function POST(request) {
         let body = await (contentType && contentType.includes("application/json") ? request.json() : {});
         await schema.validate(body);
 
-        const { email, password } = body;
+        const { username, password } = body;
 
-        // Retrieve user record from database by email
-        const user_data = await prisma.users.findUnique({ where: { email } });
+        // Retrieve user record from database by username
+        const user_data = await prisma.users.findUnique({ where: { username } });
 
         // Return error if user does not exist
         if (!user_data) {
@@ -51,7 +51,7 @@ export async function POST(request) {
 
         // Generate JWT for authenticated session
         const token = jwt.sign(
-            { userId: user_data.id, email: email, mobile: user_data.mobile },
+            { userId: user_data.id, username: username, mobile: user_data.mobile },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );

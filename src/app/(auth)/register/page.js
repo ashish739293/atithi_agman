@@ -11,7 +11,12 @@ export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [pincode, setPincode] = useState("");
   const [message, setMessage] = useState(""); // Message to display feedback
   const [messageType, setMessageType] = useState(""); // Type of message (success or error)
   const router = useRouter(); // Initialize router for navigation
@@ -27,7 +32,7 @@ export default function SignUpPage() {
         headers: {
           'Content-Type': 'application/json', // Set content type to JSON
         },
-        body: JSON.stringify({ email, password, name, mobile }), // Send user data as JSON
+        body: JSON.stringify({ username, email, password, confirmPassword, name, mobile, address1, address2, pincode }), // Send user data as JSON
       });
 
       const userData = await response.json(); // Parse JSON response
@@ -45,10 +50,14 @@ export default function SignUpPage() {
         router.push('/dashboard'); // Redirect to the dashboard on success
       } else {
         // Handle error responses
-        setEmail(""); // Reset email input
-        setPassword(""); // Reset password input
-        setName(""); // Reset name input
-        setMobile(""); // Reset mobile input
+        // setEmail(""); // Reset email input
+        // setPassword(""); // Reset password input
+        // setName(""); // Reset name input
+        // setUsername(""); // Reset username input
+        // setMobile(""); // Reset mobile input
+        // setAddress1(""); // Reset Address1 input
+        // setAddress2(""); // Reset Address2 input
+        // setPincode(""); // Reset Pincode input
         setMessage(userData.message); // Set error message
         setMessageType("error");
       }
@@ -58,6 +67,12 @@ export default function SignUpPage() {
       setMessageType("error");
     }
   };
+
+
+  const goToLogin = () => {
+    router.push('/login');
+  };
+
 
   // Function to handle Google Sign-In (placeholder for future implementation)
   const handleGoogleSignIn = () => {
@@ -73,96 +88,131 @@ export default function SignUpPage() {
         onClose={() => setMessage("")} // Close message box
       />
       {/* Main container with background image */}
-      <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url("/path/to/forest-background.jpg")' }}>
-        <div className="relative w-96">
-          {/* Back button */}
+      <div className="flex items-center justify-center min-h-screen bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: 'url("background-image.jpeg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        {/* Overlay for darkening and slightly blurring the background */}
+        <div className="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-sm"></div>
+
+        {/* Centered login card */}
+        <div className="relative w-full max-w-4xl mx-auto p-8 bg-white bg-opacity-30 backdrop-blur-sm rounded-3xl shadow-lg text-black z-10">
           <button
-            onClick={() => router.back()} // Go back to the previous page
-            className="absolute top-2 -left-24 bg-red-500 rounded-full text-white text-xl flex items-center justify-center w-10 h-10"
+            onClick={() => router.back()}
+            className="absolute top-8 left-10 bg-yellow-500 rounded-full text-white text-2xl flex items-center justify-center w-8 h-8"
           >
             &#8592;
           </button>
 
-          {/* Signup form container */}
-          <div className="bg-black bg-opacity-60 p-8 rounded-lg w-96 text-white">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Signup</h2> {/* Form title */}
-            </div>
+          <h1 className="text-center text-2xl font-semibold text-yellow-500 mb-4">
+            Welcome on Atithi Agman
+          </h1>
+          
+          <p className="text-right text-white cursor-pointer mb-3" onClick={goToLogin}>
+            Already Registered
+          </p>
 
-            {/* Signup form */}
-            <form onSubmit={handleSignup} className="space-y-4">
-              {/* Input for Name */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Enter Full Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)} // Update name state on change
-                  className="w-full px-4 py-2 text-black rounded-full"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSignup} className="space-y-4">
 
-              {/* Input for Mobile Number */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Mobile Number"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)} // Update mobile state on change
-                  className="w-full px-4 py-2 text-black rounded-full"
-                  required
-                />
-              </div>
-
-              {/* Input for Email */}
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)} // Update email state on change
-                  className="w-full px-4 py-2 text-black rounded-full"
-                  required
-                />
-                {/* Email icon */}
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center bg-black rounded-full p-2">
-                  <FaEnvelope className="text-gray-500" />
-                </div>
-              </div>
-
-              {/* Input for Password */}
-              <input
-                type="password"
-                placeholder="8 Character Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} // Update password state on change
+            <div className="flex items-center justify-between mb-4 space-x-4">
+            <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-2 text-black rounded-full"
                 required
               />
-              {/* Signup button */}
-              <button
-                type="submit"
-                className="w-full py-2 bg-red-500 rounded-full font-bold text-white"
-              >
-                SignUp
-              </button>
-            </form>
-
-            {/* Alternative sign-in option */}
-            <div className="text-center mt-4">
-              <p>or</p>
-              <button
-                onClick={handleGoogleSignIn} // Call Google Sign-In function
-                className="w-full py-2 bg-white text-black rounded-full flex items-center justify-center space-x-2 mt-2"
-              >
-                <img src="/google.png" alt="Google icon" className="w-5 h-5" />
-                <span>Sign in with Google</span>
-              </button>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
             </div>
-          </div>
+
+
+            <div className="flex items-center justify-between mb-4 space-x-4">
+            <input
+                type="text"
+                placeholder="Mobile Number"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Address Line 1"
+                value={address1}
+                onChange={(e) => setAddress1(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-between mb-4 space-x-4">
+            <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Address Line 2"
+                value={address2}
+                onChange={(e) => setAddress2(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-between mb-4 space-x-4">
+            <input
+                type="text"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Pincode"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-start mb-4">
+              <input
+                type="text"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-1/2  px-4 py-2 text-black rounded-full"
+                required
+              />
+            </div>
+
+
+            <div className="flex items-center justify-end mb-4">
+            <button
+              type="submit"
+              className="w-1/2 py-2 bg-yellow-500 rounded-full font-bold text-white"
+            >
+              Signup
+            </button>
+            </div>
+          </form>
         </div>
       </div>
+
+
     </>
   );
 }
