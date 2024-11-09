@@ -72,5 +72,5 @@ export async function middleware(request) {
  * Adjust these paths as per application requirements.
  */
 export const config = {
-    matcher: ['/api/:path*', '/dashboard/:path*','admin/dasboard'],
+    matcher: ['/api/:path*', '/dashboard/:path*', '/admin/dashboard'],
 };

@@ -7,6 +7,15 @@ export default function Home() {
       <Header />
       <main className="p-4">
         <EventCard />
+
+        <table>
+          <thead>
+            <th>Name</th>
+          </thead>
+          <tbody>
+            <td>Ashish</td>
+          </tbody>
+        </table>
       </main>
     </>
   );

@@ -1,6 +1,8 @@
 import { CalendarIcon, LinkIcon, UserIcon, ShareIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 const EventCard = () => {
+
+  
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mx-auto mt-8 border border-gray-200 flex items-center justify-between">
       

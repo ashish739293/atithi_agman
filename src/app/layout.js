@@ -17,7 +17,7 @@ export default function Layout({ children }) {
           </header> */}
 
           {/* Main Content */}  
-          <main className="flex-1 container">{children}</main>
+          <main className="flex-1">{children}</main>
 
           {/* Footer */}
           {/* <footer className="bg-gray-900 text-white text-center py-4">
