@@ -14,25 +14,25 @@ import jwt from 'jsonwebtoken';
 // Validation schema for required parameters
 const Schema = yup.object().shape({
     name: yup.string()
-    .required('name is required')
-    .min(2, 'name must be at least 2 characters long')
-    .matches(/^[a-zA-Z0-9 ]+$/, 'name cannot contain special characters')
-    .matches(/^\S(?:.*\S)?$/, 'name cannot contain leading or trailing spaces'),
-    email : yup.string()
-     .email('Invalid email address')
-     .required('Email is required')
-     .test('is-present', 'Email is required', value => value?.trim() !== '')
-     .matches(/^[^\s@]+@[^\s@]+\.(com|in|co|org|net|gov|edu|biz)(\.[a-zA-Z]{2})?$/, 'Invalid email address')
-     .test('single-extension', 'Only one extension is allowed per email address', value => 
-       (value.split('@')[1].match(/\./g) || []).length <= 2)
-     .matches(/^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)?@[^\s@]+$/, 'Only letters, numbers, dots, and underscores are allowed before the @ symbol and only one dot is allowed'),
+        .required('name is required')
+        .min(2, 'name must be at least 2 characters long')
+        .matches(/^[a-zA-Z0-9 ]+$/, 'name cannot contain special characters')
+        .matches(/^\S(?:.*\S)?$/, 'name cannot contain leading or trailing spaces'),
+    email: yup.string()
+        .email('Invalid email address')
+        .required('Email is required')
+        .test('is-present', 'Email is required', value => value?.trim() !== '')
+        .matches(/^[^\s@]+@[^\s@]+\.(com|in|co|org|net|gov|edu|biz)(\.[a-zA-Z]{2})?$/, 'Invalid email address')
+        .test('single-extension', 'Only one extension is allowed per email address', value =>
+            (value.split('@')[1].match(/\./g) || []).length <= 2)
+        .matches(/^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)?@[^\s@]+$/, 'Only letters, numbers, dots, and underscores are allowed before the @ symbol and only one dot is allowed'),
     username: yup.string()
-    .required('username is required')
-    .matches(/^(?!0+$)[a-zA-Z0-9@_]+$/, 'username cannot contain special characters except @ and _, and cannot be only "0"')
-    .test('not-only-space', 'username cannot consist only of spaces', value => !(/^\s+$/.test(value)))
-    .test('not-only-special-characters', 'username cannot consist only of special characters', value => !(/^[@_ ]+$/.test(value))),  
+        .required('username is required')
+        .matches(/^(?!0+$)[a-zA-Z0-9@_]+$/, 'username cannot contain special characters except @ and _, and cannot be only "0"')
+        .test('not-only-space', 'username cannot consist only of spaces', value => !(/^\s+$/.test(value)))
+        .test('not-only-special-characters', 'username cannot consist only of special characters', value => !(/^[@_ ]+$/.test(value))),
     mobile: yup.string().matches(/^[0-9]{10}$/, 'Invalid mobile number').required("mobile is required"),
-    password: yup.string().required('password is required').min(6, 'password must be at least 6 characters').matches(/^(?![\s@!#$%^&*()_+={}[\]:";'<>?,./\\|`~])[A-Za-z\d@$!%*?&]{6,}$/,'password in only space and spacle characters  is not valid '),
+    password: yup.string().required('password is required').min(6, 'password must be at least 6 characters').matches(/^(?![\s@!#$%^&*()_+={}[\]:";'<>?,./\\|`~])[A-Za-z\d@$!%*?&]{6,}$/, 'password in only space and spacle characters  is not valid '),
     confirmPassword: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match'),
     address1: yup.string().required('address1 is required'),
     address2: yup.string().required('address2 is required'),
@@ -66,8 +66,8 @@ export async function POST(request) {
                     type: 'User',
                     password: hashedPassword,
                     pincode,
-                    address_1:address1,
-                    address_2:address2
+                    address_1: address1,
+                    address_2: address2
                 },
             });
 

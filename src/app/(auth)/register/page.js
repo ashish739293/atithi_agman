@@ -199,7 +199,6 @@ export default function SignUpPage() {
               />
             </div>
 
-
             <div className="flex items-center justify-end mb-4">
             <button
               type="submit"
