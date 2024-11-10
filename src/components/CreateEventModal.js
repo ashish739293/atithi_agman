@@ -58,7 +58,8 @@ const CreateEventModal = ({ closeModal }) => {
       formData.append('username', username);
       formData.append('date', date);
       formData.append('file', file);
-      const authToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYXNoaXNoMTIzIiwibW9iaWxlIjoiNzM5MjkzMjMwNSIsImlhdCI6MTczMTE3NDc4NCwiZXhwIjoxNzMxMjYxMTg0fQ.9figCGHzAOGe70KLEAMYaIozsFJYtT1i5kf3HU3_nAs";
+
+      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicGt5MTIzIiwibW9iaWxlIjoiNzIzNTgwNDkxNCIsImlhdCI6MTczMTIzNDU3OSwiZXhwIjoxNzMxMzIwOTc5fQ.GrRniGBgErNaZZgFNjcr34Zofw0zGgf-NzsXGlPh2wE';
       try {
         const response = await fetch('/api/createEvent', {
           method: 'POST',
@@ -73,7 +74,7 @@ const CreateEventModal = ({ closeModal }) => {
           console.log("Event created successfully");
           closeModal();
         } else {
-          const errorData = await response.json();
+          const errorData = await response.text();
           console.error("Error creating event:", errorData.message);
         }
       } catch (error) {

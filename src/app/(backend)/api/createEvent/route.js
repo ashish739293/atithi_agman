@@ -73,7 +73,6 @@ export async function POST(request) {
         if (!userExists) {
             return NextResponse.json({ status: 404, message: "User not found" }, { status: 404 });
         }
-       
         // Create the event in the database
         const event = await prisma.events.create({
             data: {
