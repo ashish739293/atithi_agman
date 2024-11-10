@@ -34,5 +34,12 @@ model events {
   updatedAt DateTime @updatedAt
   user      users    @relation(fields: [user_id], references: [id])
 
+model contact_data {
+  id         Int      @id @default(autoincrement())
+  name       String   @default("")
+  mobile     String   @default("") @db.VarChar(20)
+  message    String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
   @@index([user_id])
 }

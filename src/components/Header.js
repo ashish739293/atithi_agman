@@ -36,16 +36,17 @@ const Header = () => {
       {/* Login/Signup Button */}
       {isHomePage && (
         <div className="flex items-center space-x-4">
-          <div className="flex space-x-2 bg-[#d4af37] text-black font-medium text-sm rounded-full">
+          <div className="flex bg-[#d4af37] text-black font-medium text-sm rounded-md">
             <button 
               onClick={() => router.push('/login')} 
-              className="px-4 py-1.5 rounded-l-full">
+              className="pl-4 pb-1 pt-1 rounded-l-full">
               Login
             </button>
+            <span className='pt-1'>/</span>
             <button 
-              onClick={() => router.push('/signup')} 
-              className="px-4 py-1.5 rounded-r-full">
-              Sign Up
+              onClick={() => router.push('/register')} 
+              className="pr-4 pb-1 pt-1 rounded-r-full">
+              Signup
             </button>
           </div>
         </div>

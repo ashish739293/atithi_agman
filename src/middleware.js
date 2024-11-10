@@ -8,7 +8,7 @@ export async function middleware(request) {
     const { pathname } = request.nextUrl;
 
     // Define allowed paths that bypass authentication for API and UI routes
-    const allowedPaths = ['/api/signIn', '/api/signUp', '/api/tokenverify'];
+    const allowedPaths = ['/api/signIn', '/api/signUp', '/api/tokenverify', '/api/contacts'];
     const allowedPathsUI = ['/login', '/register'];
 
     // Set CORS headers to allow cross-origin requests from any source
