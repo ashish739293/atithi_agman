@@ -76,7 +76,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
         formData.append('eventId', event.id);
       }
 
-      try {
+      // try {
         const url = event ? '/api/updateEvent' : '/api/createEvent'; // Dynamic URL based on action
         const method = event ? 'PUT' : 'POST'; // 'PUT' for editing, 'POST' for creating
 
@@ -101,11 +101,11 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
           const errorData = await response.json();
           console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, errorData.message);
         }
-      } catch (error) {
-        console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, error);
-      } finally {
-        setIsLoading(false);
-      }
+      // } catch (error) {
+      //   console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, error);
+      // } finally {
+      //   setIsLoading(false);
+      // }
     } else {
       setErrors(formErrors);
     }
