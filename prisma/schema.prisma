@@ -20,16 +20,19 @@ model users {
   address_2  String?   @default("NA")
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
+  events     events[]
 }
 
 model events {
   id        Int      @id @default(autoincrement())
-  title     String   @default("0")
-  date      DateTime @default(dbgenerated("(now(3))")) @db.DateTime(0)
-  filePath  String   @default("0")
-  createdAt DateTime @default(dbgenerated("(now(3))")) @db.DateTime(0)
-  updatedAt DateTime @updatedAt @db.DateTime(0)
   user_id   Int
+  username   String?
+  title     String   
+  date      DateTime 
+  filePath  String   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      users    @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
 }

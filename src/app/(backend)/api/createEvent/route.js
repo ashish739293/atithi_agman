@@ -73,19 +73,16 @@ export async function POST(request) {
         if (!userExists) {
             return NextResponse.json({ status: 404, message: "User not found" }, { status: 404 });
         }
-        date = '2024-11-09 17:53:04.436'
-        console.log("<><><><>userExists<><><>")
-        let data= {
-            title: title || "", // Provide a default value if title is missing
-            username: username || "", // Provide a default value if username is missing
-            date: date ? new Date(date) : new Date(), // Ensure date is valid
-            filePath: filePath || "", // Provide a default value if filePath is missing
-            user_id: 1, // Ensure this is a valid user ID
-        }
-        console.log(data);
+       
         // Create the event in the database
         const event = await prisma.events.create({
-            data: data
+            data: {
+                title: title, 
+                username: username, 
+                date: new Date(date),
+                filePath: filePath ,
+                user_id: decoded.userId,
+            },
         });
 
         return NextResponse.json({ status: 200, message: "Event Created Successfully", data: event });
