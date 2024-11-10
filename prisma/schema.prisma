@@ -21,6 +21,7 @@ model users {
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
   events     events[]
+  guest_lists     guest_lists[]
 }
 
 model events {
@@ -28,11 +29,39 @@ model events {
   user_id   Int
   username   String?
   title     String   
+  total_send   Int?        @default(0)
+  total_receive   Int?     @default(0)
   date      DateTime 
   filePath  String   
+  link  String   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   user      users    @relation(fields: [user_id], references: [id])
+
+  guest_lists     guest_lists[]
+
+  @@index([user_id])
+}
+
+
+model guest_lists {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  event_id   Int
+  name       String?
+  mobile     String?
+  send       Int?      @default(0)
+  receive    Int?      @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  event      events    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([event_id])
+}
+
 
 model contact_data {
   id         Int      @id @default(autoincrement())

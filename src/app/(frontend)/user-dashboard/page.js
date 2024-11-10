@@ -30,10 +30,10 @@ export default function Home() {
         setEvents(data.data); // Assuming events are in `data.data`
       } else {
         const errorData = await response.json();
-        console.error("Error fetching events:", errorData.message);
+        console.log("Error fetching events:", errorData.message);
       }
     } catch (error) {
-      console.error("Fetch events failed:", error);
+      console.log("Fetch events failed:", error);
     }
   };
 

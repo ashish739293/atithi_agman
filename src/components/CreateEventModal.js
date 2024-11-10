@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import * as XLSX from "xlsx";
 
 const authToken = Cookies.get('token');
 
@@ -76,7 +77,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
         formData.append('eventId', event.id);
       }
 
-      // try {
+      try {
         const url = event ? '/api/updateEvent' : '/api/createEvent'; // Dynamic URL based on action
         const method = event ? 'PUT' : 'POST'; // 'PUT' for editing, 'POST' for creating
 
@@ -99,17 +100,29 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
 
         } else {
           const errorData = await response.json();
-          console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, errorData.message);
+          console.log(`${event ? 'Error updating event' : 'Error creating event'}:`, errorData.message);
         }
-      // } catch (error) {
-      //   console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, error);
-      // } finally {
-      //   setIsLoading(false);
-      // }
+      } catch (error) {
+        console.log(`${event ? 'Error updating event' : 'Error creating event'}:`, error);
+      } finally {
+        setIsLoading(false);
+      }
     } else {
       setErrors(formErrors);
     }
   };
+
+  function downloadSampleExcel() {
+    const workbook = XLSX.utils.book_new();
+    const worksheetData = [
+      { name: "", mobile: "", person: "" } // Empty data to represent columns
+    ];
+    // Create worksheet from the data array and set it in workbook
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Invitaion");
+    // Generate the file and trigger download
+    XLSX.writeFile(workbook, "InvitationList.xlsx");
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -171,7 +184,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
                 </label>
               </div>
               <span>
-                <a href="#" className="underline text-sm">
+                <a href="#" onClick={downloadSampleExcel} className="underline text-sm">
                   Download Sample Excel
                 </a>
               </span>
