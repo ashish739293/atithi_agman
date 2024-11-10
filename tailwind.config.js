@@ -11,6 +11,12 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        script: ['Petit Formal Script', 'cursive'],
+      },
+      boxShadow: {
+        'black-soft': '0 4px 8px rgba(0, 0, 0, 0.5)', // Adjust the offset and blur as needed
+      },
     },
   },
   plugins: [],
