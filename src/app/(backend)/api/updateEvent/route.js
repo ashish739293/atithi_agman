@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import * as yup from 'yup';
-import prisma from "@/utils/prismadb";
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs/promises';
 import path from 'path';
+import prisma from "@/utils/prismadb";
+import * as yup from 'yup';
+
 
 const eventSchema = yup.object().shape({
     title: yup.string().required('Title is required').min(3, 'Title must be at least 3 characters long'),
@@ -12,24 +13,20 @@ const eventSchema = yup.object().shape({
     date: yup.date().required('Date is required').min(new Date(), 'Event date must be in the future'),
 });
 
-export async function POST(request) {
+export async function PUT(request) {
     try {
         const headers = request.headers;
-
-        // Get and validate Authorization header
         const authHeader = headers.get('authorization');
+
         if (!authHeader) {
             return NextResponse.json({ status: 401, message: "Unauthorized" }, { status: 401 });
         }
 
         const token = authHeader.split(' ')[1];
         let decoded;
-
-        // Verify JWT token
         try {
             decoded = jwt.verify(token, process.env.JWT_SECRET);
         } catch (err) {
-            console.error("Token verification failed:", err);
             return NextResponse.json({ status: 401, message: "Invalid or expired token" }, { status: 401 });
         }
 
@@ -43,13 +40,28 @@ export async function POST(request) {
         }
 
         const formData = await request.formData();
+        let eventId = formData.get('eventId');
         const title = formData.get('title');
         const username = formData.get('username');
         let date = formData.get('date');
         const file = formData.get('file');
 
-        // Validate form data using yup schema
-        await eventSchema.validate({ title, username, date });
+        eventId = parseInt(eventId, 10);
+
+         // Validate form data using yup schema
+         await eventSchema.validate({ title, username, date });
+
+        const event = await prisma.events.findUnique({
+            where: { id: eventId },
+        });
+
+        if (!event) {
+            return NextResponse.json({ status: 404, message: "Event not found" }, { status: 404 });
+        }
+
+        if (event.user_id !== decoded.userId) {
+            return NextResponse.json({ status: 403, message: "You are not authorized to update this event" }, { status: 403 });
+        }
 
         let filePath;
         if (file && file.name) {
@@ -60,34 +72,19 @@ export async function POST(request) {
             await fs.writeFile(`./public${filePath}`, buffer);
         }
 
-        // Ensure that the userId exists in the decoded token
-        if (!decoded.userId) {
-            return NextResponse.json({ status: 400, message: "Invalid userId in token" }, { status: 400 });
-        }
-
-        // Check if user exists in the database before creating the event
-        const userExists = await prisma.users.findUnique({
-            where: { id: decoded.userId },
-        });
-
-        if (!userExists) {
-            return NextResponse.json({ status: 404, message: "User not found" }, { status: 404 });
-        }
-        // Create the event in the database
-        const event = await prisma.events.create({
+        const updatedEvent = await prisma.events.update({
+            where: { id: eventId },
             data: {
-                title: title,
-                username: username, 
-                date: new Date(date),
-                filePath: filePath,
-                user_id: decoded.userId,
+                title: title || event.title,
+                // username: username || event.username,
+                date: date ? new Date(date) : event.date,
+                filePath: filePath || event.filePath,
             },
         });
 
-        return NextResponse.json({ status: 200, message: "Event Created Successfully", data: event });
+        return NextResponse.json({ status: 200, message: "Event updated successfully", data: updatedEvent });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return NextResponse.json({ status: 500, error: error.message }, { status: 500 });
     }
 }
-

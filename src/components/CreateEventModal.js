@@ -1,7 +1,10 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
-const CreateEventModal = ({ closeModal }) => {
+const authToken = Cookies.get('token');
+
+const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) => {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState('');
   const [username, setUsername] = useState('');
@@ -9,12 +12,23 @@ const CreateEventModal = ({ closeModal }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // Prefill form fields if event data is provided (edit mode)
+  useEffect(() => {
+    if (event) {
+      setTitle(event.title);
+      setUsername(event.username);
+      setDate(event.date);
+      // If the event already has a file, you can handle it in some way, or keep it as null
+      setFile(null); // This can be replaced with logic if you want to show the existing file.
+    }
+  }, [event]);
+
   const validateForm = () => {
     let formErrors = {};
     if (!title) formErrors.title = "Event title is required";
     if (!username) formErrors.username = "Username is required";
     if (!date) formErrors.date = "Date is required";
-    if (!file) formErrors.file = "Guest list file is required";
+    if (!file && !event?.file) formErrors.file = "Guest list file is required";
     return formErrors;
   };
 
@@ -57,28 +71,38 @@ const CreateEventModal = ({ closeModal }) => {
       formData.append('title', title);
       formData.append('username', username);
       formData.append('date', date);
-      formData.append('file', file);
+      if (file) formData.append('file', file);
+      if (event?.id) {
+        formData.append('eventId', event.id);
+      }
 
-      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicGt5MTIzIiwibW9iaWxlIjoiNzIzNTgwNDkxNCIsImlhdCI6MTczMTIzNDU3OSwiZXhwIjoxNzMxMzIwOTc5fQ.GrRniGBgErNaZZgFNjcr34Zofw0zGgf-NzsXGlPh2wE';
       try {
-        const response = await fetch('/api/createEvent', {
-          method: 'POST',
+        const url = event ? '/api/updateEvent' : '/api/createEvent'; // Dynamic URL based on action
+        const method = event ? 'PUT' : 'POST'; // 'PUT' for editing, 'POST' for creating
+
+        const response = await fetch(url, {
+          method,
           body: formData,
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${authToken}`, // Include the auth token here
+            'Authorization': `Bearer ${authToken}`,
           },
         });
 
         if (response.ok) {
-          console.log("Event created successfully");
-          closeModal();
+          console.log(`${event ? 'Event updated' : 'Event created'} successfully`);
+          fetchEvents();
+          if (event) {
+            closeEdit()
+          } else {
+            closeModal()
+          }
+
         } else {
-          const errorData = await response.text();
-          console.error("Error creating event:", errorData.message);
+          const errorData = await response.json();
+          console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, errorData.message);
         }
       } catch (error) {
-        console.error("Error creating event:", error);
+        console.error(`${event ? 'Error updating event' : 'Error creating event'}:`, error);
       } finally {
         setIsLoading(false);
       }
@@ -90,7 +114,16 @@ const CreateEventModal = ({ closeModal }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 text-sm text-black rounded-lg shadow-lg w-[500px] max-w-full">
-        <h2 className="text-black text-xl font-bold mb-4">Create Event</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-black text-xl font-bold">{event ? 'Edit Event' : 'Create Event'}</h2>
+          <button
+            type="button"
+            onClick={event ? closeEdit : closeModal}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <span className="text-2xl">&times;</span>
+          </button>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
@@ -156,7 +189,7 @@ const CreateEventModal = ({ closeModal }) => {
               className="px-6 py-2 bg-[#d4af37] text-white rounded-full hover:bg-[#bfa22d]"
               disabled={isLoading}
             >
-              {isLoading ? "Creating..." : "Submit and Create Event"}
+              {isLoading ? "Saving..." : event ? "Update Event" : "Submit and Create Event"}
             </button>
           </div>
         </form>
@@ -166,3 +199,4 @@ const CreateEventModal = ({ closeModal }) => {
 };
 
 export default CreateEventModal;
+
