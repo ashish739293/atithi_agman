@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import CreateEventModal from './CreateEventModal';
@@ -8,7 +9,9 @@ import CreateEventModal from './CreateEventModal';
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-  const isHomePage = router.pathname !== '/';
+  const pathname = usePathname();
+  console.log(pathname);
+  const isHomePage = pathname === '/';
   console.log("+++++++++++++++==")
   console.log(isHomePage);
   const openModal = () => setIsModalOpen(true);
