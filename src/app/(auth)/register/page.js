@@ -47,7 +47,7 @@ export default function SignUpPage() {
         Cookies.set("mobile", userData.data.mobile, { expires: 1 });
         setMessage(userData.message); // Set success message
         setMessageType("success");
-        router.push('/dashboard'); // Redirect to the dashboard on success
+        router.push('/user-dashboard'); // Redirect to the dashboard on success
       } else {
         // Handle error responses
         // setEmail(""); // Reset email input
@@ -58,7 +58,7 @@ export default function SignUpPage() {
         // setAddress1(""); // Reset Address1 input
         // setAddress2(""); // Reset Address2 input
         // setPincode(""); // Reset Pincode input
-        setMessage(userData.message); // Set error message
+        setMessage(userData.message || userData.error); // Set error message
         setMessageType("error");
       }
     } catch (error) {
@@ -171,7 +171,7 @@ export default function SignUpPage() {
 
             <div className="flex items-center justify-between mb-4 space-x-4">
             <input
-                type="text"
+                type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -190,7 +190,7 @@ export default function SignUpPage() {
 
             <div className="flex items-center justify-start mb-4">
               <input
-                type="text"
+                type="password"
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

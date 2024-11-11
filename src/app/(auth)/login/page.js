@@ -34,11 +34,12 @@ export default function LoginPage() {
 
         setMessage(userData.message);
         setMessageType("success");
-        router.push('/dashboard');
+        let path = userData.data.type === "User" ? "/user-dashboard" : "/admin/dashboard"; 
+        router.push(path);
       } else {
         setUsername("");
         setPassword("");
-        setMessage(userData.message);
+        setMessage(userData?.message || userData?.error );
         setMessageType("error");
       }
     } catch (error) {
@@ -58,11 +59,14 @@ export default function LoginPage() {
 
   return (
     <>
-      <MessageBox
-        message={message}
-        type={messageType}
-        onClose={() => setMessage("")}
-      />
+  <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50">
+  <MessageBox
+    message={message}
+    type={messageType}
+    onClose={() => setMessage("")}
+    className="p-4 bg-yellow-500 text-white rounded-lg shadow-lg"
+  />
+</div>
     
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: 'url("background-image.jpeg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Overlay for darkening and slightly blurring the background */}

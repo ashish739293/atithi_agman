@@ -1,5 +1,4 @@
 "use client"
-import Header from '../../../components/Header';
 import EventCard from '../../../components/EventCard';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
@@ -15,7 +14,7 @@ export default function Home() {
   // Function to fetch events
   const fetchEvents = async () => {
     try {
-      const token = localStorage.getItem('authToken'); // Assuming token is stored in localStorage
+      // const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
 
       const response = await fetch('/api/getEvents', {
         method: 'GET',
@@ -46,7 +45,6 @@ export default function Home() {
 
   return (
     <>
-      <Header />
       <main className="p-4">
         {events.map(event => (
           <EventCard key={event.id} event={event} fetchEvents={fetchEvents} />
