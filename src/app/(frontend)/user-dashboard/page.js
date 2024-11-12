@@ -26,7 +26,7 @@ export default function Home() {
 
       if (response.ok) {
         const data = await response.json();
-        setEvents(data.data); // Assuming events are in `data.data`
+        setEvents(data.data);
       } else {
         const errorData = await response.json();
         console.log("Error fetching events:", errorData.message);
@@ -38,7 +38,6 @@ export default function Home() {
 
 
   useEffect(() => {
-    // Call the fetch function
     fetchEvents();
   }, [authToken]); // Empty dependency array ensures this runs only once on component mount
 

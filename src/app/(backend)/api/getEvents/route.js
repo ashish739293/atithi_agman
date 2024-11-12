@@ -32,7 +32,7 @@ export async function GET(request) {
         const events = await prisma.events.findMany({
             where: { user_id: decoded.userId },
         });
-
+        
         if (!events || events.length === 0) {
             return NextResponse.json({ status: 404, message: "No events found for this user" }, { status: 404 });
         }

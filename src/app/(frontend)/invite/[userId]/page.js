@@ -1,38 +1,62 @@
-"use client";
 
+"use client";
 import React, { useState } from 'react';
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Plus, Minus } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Plus, Minus } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const InvitationForm = () => {
+    const router = useRouter();
     const [memberCount, setMemberCount] = useState(0);
     const [formData, setFormData] = useState({
         name: '',
-        mobile: ''
+        mobile: '',
     });
 
     const handleIncrement = () => {
-        setMemberCount(prev => prev + 1);
+        setMemberCount((prev) => prev + 1);
     };
 
     const handleDecrement = () => {
-        setMemberCount(prev => prev > 0 ? prev - 1 : 0);
+        setMemberCount((prev) => (prev > 0 ? prev - 1 : 0));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ ...formData, memberCount });
+        try {
+            const response = await fetch('/api/invitation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...formData, memberCount }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                toast.success('Invitation submitted successfully!');
+                router.push(`/invite/${data.username}`);
+            } else {
+                toast.error('Error submitting invitation. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error submitting invitation:', error);
+            toast.error('Error submitting invitation. Please try again.');
+        }
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 bg-opacity-25"
+        <div
+            className="min-h-screen w-full flex items-center justify-center bg-gray-900 bg-opacity-25"
             style={{
                 backgroundImage: 'url("/invite.png")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-            }}>
+            }}
+        >
             <Card className="w-full max-w-md mx-4 bg-[#18130c] bg-opacity-20 backdrop-blur-sm p-8 rounded-xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="text-center space-y-2">
@@ -57,7 +81,7 @@ const InvitationForm = () => {
                         />
 
                         <div className="flex items-center justify-between rounded-full px-6 h-12">
-                            <span className="text-white">How many member coming?</span>
+                            <span className="text-white">How many members are coming?</span>
                             <div className="flex items-center gap-2 bg-white px-3 h-10 rounded-full ">
                                 <Button
                                     type="button"

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { CalendarIcon, LinkIcon, UserIcon, ShareIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import CreateEventModal from './CreateEventModal';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
 const authToken = Cookies.get('token');

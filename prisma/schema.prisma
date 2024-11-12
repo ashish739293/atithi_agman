@@ -70,5 +70,4 @@ model contact_data {
   message    String   @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-  @@index([user_id])
 }
