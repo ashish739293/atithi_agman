@@ -129,73 +129,86 @@ const EventCard = ({ event, fetchEvents }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md mx-auto mt-8 border border-gray-200 flex flex-col">
+    <div className="bg-white p-4 rounded-lg shadow-md mx-auto mt-8 border border-gray-200 flex flex-col max-w-full">
       {/* Event Card */}
-      <div className="flex items-center justify-between" onClick={toggleTable}>
-        <div className="flex items-start space-x-4">
-          <div className="flex flex-col space-y-1">
+      <div className="flex items-center justify-between flex-wrap sm:flex-nowrap" onClick={toggleTable}>
+        <div className="flex items-start space-x-4 w-full sm:w-auto">
+          <div className="flex flex-col space-y-1 w-full sm:w-auto">
             <div className="flex items-center space-x-2">
               <UserIcon className="w-5 h-5 text-gray-800" />
-              <span className="text-xl font-semibold text-gray-800">{event.title}</span>
+              <span className="text-xl font-semibold text-gray-800 truncate">{event.title}</span>
             </div>
             <a
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-gray-500 hover:text-blue-500 flex items-center"
+              className="text-sm text-gray-500 hover:text-blue-500 flex items-center truncate"
             >
               <LinkIcon className="w-4 h-4 mr-1" />
               {event.link}
             </a>
             <div className="flex space-x-2 mt-2">
-              {event.total_send > 0 &&
+              {event.total_send > 0 && (
                 <span className="bg-black text-white px-3 py-1 rounded-full text-sm font-semibold">
                   Total Sent: {event.total_send}
                 </span>
-              }
-              {event.total_recieved > 0 &&
+              )}
+              {event.total_receive > 0 && (
                 <span className="bg-[#d4af37] text-black px-3 py-1 rounded-full text-sm font-semibold">
-                  Total Received: {event.total_recieved}
+                  Total Received: {event.total_receive}
                 </span>
-              }
+              )}
             </div>
           </div>
         </div>
-
-        <div className="flex flex-col items-end space-y-2">
+  
+        <div className="flex flex-col items-end space-y-2 w-full sm:w-auto">
           <div className="flex items-center text-gray-500 space-x-1">
             <CalendarIcon className="w-5 h-5" />
             <span className="text-sm">{formattedDate}</span>
           </div>
-
+  
           <div className="relative">
             <button
               className="flex items-center text-gray-600 bg-gray-100 px-2 py-1 rounded-full hover:bg-gray-200 text-sm font-semibold space-x-1"
-              onClick={handleCopyLink}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event from bubbling up to the parent
+                handleCopyLink();
+              }}
             >
               <ShareIcon className="w-4 h-4" />
               <span>Share</span>
             </button>
-
+  
             {showCopied && (
-              <div
-                className="absolute top-[-40px] left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg transition-all duration-300 ease-in-out"
-                style={{ animation: "fadeOut 3s forwards" }}
-              >
-                Link Copied!
+              <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg transition-transform duration-500 ease-in-out opacity-0 animate-fade-out">
+                <span className="text-sm">Link Copied!</span>
               </div>
             )}
-
+  
             {/* Animation for fade out */}
             <style jsx>{`
-                @keyframes fadeOut {
-                    0% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { opacity: 0; }
+              @keyframes fade-out {
+                0% {
+                  opacity: 1;
+                  transform: translateY(0);
                 }
+                80% {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+                100% {
+                  opacity: 0;
+                  transform: translateY(-10px);
+                }
+              }
+  
+              .animate-fade-out {
+                animation: fade-out 2.5s forwards;
+              }
             `}</style>
           </div>
-
+  
           <div className="flex space-x-4">
             <button
               className="text-red-600 font-semibold text-sm hover:text-red-700 flex items-center space-x-1"
@@ -220,7 +233,7 @@ const EventCard = ({ event, fetchEvents }) => {
           </div>
         </div>
       </div>
-
+  
       {/* Table and Search Bar */}
       {showTable && (
         <div className="mt-4">
@@ -236,44 +249,47 @@ const EventCard = ({ event, fetchEvents }) => {
               placeholder="Search by name or mobile"
             />
           </div>
-
-          <table className="min-w-full table-auto border-collapse">
-            <thead>
-              <tr className="bg-[#FF55551A] text-gray-600">
-                <th className="px-4 py-2 font-semibold">Sr No.</th>
-                <th className="px-4 py-2 font-semibold">Name</th>
-                <th className="px-4 py-2 font-semibold">Mobile</th>
-                <th className="px-4 py-2 font-semibold">Sent</th>
-                <th className="px-4 py-2 font-semibold">Received</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((row, index) => (
-                  <tr key={row.id} className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-center">
-                    <td className="px-4 py-2 text-gray-700">{row.id}</td>
-                    <td className="px-4 py-2 text-gray-700">{row.name}</td>
-                    <td className="px-4 py-2 text-gray-700">{row.mobile}</td>
-                    <td className="px-4 py-2 text-gray-700">{row.send}</td>
-                    <td className="px-4 py-2 text-gray-700">{row.receive}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-gray-500 py-4">
-                    No matching records found.
-                  </td>
+  
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border-collapse">
+              <thead>
+                <tr className="bg-[#FF55551A] text-gray-600">
+                  <th className="px-4 py-2 font-semibold">Sr No.</th>
+                  <th className="px-4 py-2 font-semibold">Name</th>
+                  <th className="px-4 py-2 font-semibold">Mobile</th>
+                  <th className="px-4 py-2 font-semibold">Sent</th>
+                  <th className="px-4 py-2 font-semibold">Received</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((row, index) => (
+                    <tr key={row.id} className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 text-center">
+                      <td className="px-4 py-2 text-gray-700">{row.id}</td>
+                      <td className="px-4 py-2 text-gray-700">{row.name}</td>
+                      <td className="px-4 py-2 text-gray-700">{row.mobile}</td>
+                      <td className="px-4 py-2 text-gray-700">{row.send}</td>
+                      <td className="px-4 py-2 text-gray-700">{row.receive}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center text-gray-500 py-4">
+                      No matching records found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
-
+  
       {/* Edit Event Modal */}
-      {showEditModal && <CreateEventModal event={event} closeModal={closeEdit} />}
+      {showEditModal && <CreateEventModal event={event} closeModal={closeEdit} fetchEvents={fetchEvents} />}
     </div>
   );
+  
 };
 
 export default EventCard;

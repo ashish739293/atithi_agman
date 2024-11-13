@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import * as XLSX from "xlsx";
+import { toast } from 'react-toastify';
 
 const authToken = Cookies.get('token');
 
-const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) => {
+console.log("<><><><><><><><><><>",authToken);
+
+const CreateEventModal = ({ closeModal =()=>{} , event = null, fetchEvents =()=>{} }) => {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState('');
   const [username, setUsername] = useState('');
@@ -13,14 +16,12 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Prefill form fields if event data is provided (edit mode)
   useEffect(() => {
     if (event) {
       setTitle(event.title);
       setUsername(event.username);
       setDate(event.date);
-      // If the event already has a file, you can handle it in some way, or keep it as null
-      setFile(null); // This can be replaced with logic if you want to show the existing file.
+      setFile(null);
     }
   }, [event]);
 
@@ -29,7 +30,6 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
     if (!title) formErrors.title = "Event title is required";
     if (!username) formErrors.username = "Username is required";
     if (!date) formErrors.date = "Date is required";
-    if (!file && !event?.file) formErrors.file = "Guest list file is required";
     return formErrors;
   };
 
@@ -37,28 +37,28 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
       setFile(uploadedFile);
-      setErrors((prevErrors) => ({ ...prevErrors, file: null })); // Clear file error
+      setErrors((prevErrors) => ({ ...prevErrors, file: null }));
     }
   };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     if (errors.title) {
-      setErrors((prevErrors) => ({ ...prevErrors, title: null })); // Clear title error
+      setErrors((prevErrors) => ({ ...prevErrors, title: null }));
     }
   };
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
     if (errors.username) {
-      setErrors((prevErrors) => ({ ...prevErrors, username: null })); // Clear username error
+      setErrors((prevErrors) => ({ ...prevErrors, username: null }));
     }
   };
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
     if (errors.date) {
-      setErrors((prevErrors) => ({ ...prevErrors, date: null })); // Clear date error
+      setErrors((prevErrors) => ({ ...prevErrors, date: null }));
     }
   };
 
@@ -78,8 +78,8 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
       }
 
       try {
-        const url = event ? '/api/updateEvent' : '/api/createEvent'; // Dynamic URL based on action
-        const method = event ? 'PUT' : 'POST'; // 'PUT' for editing, 'POST' for creating
+        const url = event ? '/api/updateEvent' : '/api/createEvent';
+        const method = event ? 'PUT' : 'POST';
 
         const response = await fetch(url, {
           method,
@@ -90,14 +90,18 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
         });
 
         if (response.ok) {
+          const data = await response.json();
           console.log(`${event ? 'Event updated' : 'Event created'} successfully`);
-          fetchEvents();
+          toast.success(data.message);
           if (event) {
-            closeEdit()
+            fetchEvents();
           } else {
-            closeModal()
+            const customEvent = new CustomEvent("createEvent", {
+              detail: { message: "Hello from Page 1!" }
+            });
+            window.dispatchEvent(customEvent);
           }
-
+          closeModal();
         } else {
           const errorData = await response.json();
           console.log(`${event ? 'Error updating event' : 'Error creating event'}:`, errorData.message);
@@ -115,23 +119,21 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
   function downloadSampleExcel() {
     const workbook = XLSX.utils.book_new();
     const worksheetData = [
-      { name: "", mobile: "", person: "" } // Empty data to represent columns
+      { name: "", mobile: "", person: "" }
     ];
-    // Create worksheet from the data array and set it in workbook
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Invitaion");
-    // Generate the file and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Invitation");
     XLSX.writeFile(workbook, "InvitationList.xlsx");
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 text-sm text-black rounded-lg shadow-lg w-[500px] max-w-full">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+      <div className="bg-white p-6 text-sm text-black rounded-lg shadow-lg w-full max-w-lg md:max-w-md lg:max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-black text-xl font-bold">{event ? 'Edit Event' : 'Create Event'}</h2>
           <button
             type="button"
-            onClick={event ? closeEdit : closeModal}
+            onClick={closeModal}
             className="text-gray-500 hover:text-gray-700"
           >
             <span className="text-2xl">&times;</span>
@@ -148,7 +150,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
             />
             {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
           </div>
-          <div className="flex space-x-4 mb-4">
+          <div className="space-y-4 md:space-y-0 md:flex md:space-x-4 mb-4">
             <input
               type="text"
               placeholder="Enter Username"
@@ -168,8 +170,8 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">Guest List</label>
             <div className="flex items-center space-x-2">
-              <div className="border text-sm border-gray-300 rounded-full p-2 focus:outline-none focus:border-[#d4af37] flex items-center space-x-2">
-                <span>Upload Excel file</span>
+              <div className="border text-sm border-gray-300 rounded-full p-2 flex items-center space-x-2 w-full md:w-auto">
+                <span className="hidden md:inline">Upload Excel file</span>
                 <input
                   type="file"
                   onChange={handleFileChange}
@@ -178,7 +180,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
                 />
                 <label
                   htmlFor="fileUpload"
-                  className="px-6 py-2 bg-[#d4af37] text-white rounded-full cursor-pointer"
+                  className="px-4 py-2 bg-[#d4af37] text-white rounded-full cursor-pointer w-full md:w-auto text-center"
                 >
                   Select File
                 </label>
@@ -199,7 +201,7 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
           <div className="flex justify-end mt-6">
             <button
               type="submit"
-              className="px-6 py-2 bg-[#d4af37] text-white rounded-full hover:bg-[#bfa22d]"
+              className="w-full md:w-auto px-6 py-2 bg-[#d4af37] text-white rounded-full hover:bg-[#bfa22d]"
               disabled={isLoading}
             >
               {isLoading ? "Saving..." : event ? "Update Event" : "Submit and Create Event"}
@@ -212,4 +214,3 @@ const CreateEventModal = ({ closeModal, event = null, closeEdit, fetchEvents }) 
 };
 
 export default CreateEventModal;
-

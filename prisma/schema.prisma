@@ -49,15 +49,18 @@ model guest_lists {
   id         Int       @id @default(autoincrement())
   user_id    Int
   event_id   Int
-  name       String?
-  mobile     String?
-  send       Int?      @default(0)
-  receive    Int?      @default(0)
+  name       String
+  mobile     String    
+  send       Int      @default(0)
+  receive    Int      @default(0)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+
+  // Relations
   user       users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   event      events    @relation(fields: [event_id], references: [id], onDelete: Cascade)
 
+  // Indexes
   @@index([user_id])
   @@index([event_id])
 }

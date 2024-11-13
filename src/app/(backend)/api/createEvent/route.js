@@ -52,8 +52,8 @@ export async function POST(request) {
         // Validate form data using yup schema
         await eventSchema.validate({ title, username, date });
 
-        let filePath;
-        if (file && file.name) {
+        let filePath='';
+        if (file && file?.name) {
             const fileExt = path.extname(file.name);
             const uniqueFileName = `${uuidv4()}${fileExt}`;
             filePath = path.join('/uploads', uniqueFileName);
@@ -76,7 +76,7 @@ export async function POST(request) {
         }
 
         // Generate the invite link with the full domain and username
-        const inviteLink = `http://atithiagman.com/invite/${username}`;
+        const inviteLink = `https://atithiagman.com/invite/${username}`;
 
         // Create the event in the database with the invite link and get event_id
         const event = await prisma.events.create({
@@ -100,14 +100,19 @@ export async function POST(request) {
             const guestData = xlsx.utils.sheet_to_json(sheet, { header: 1 });
 
             console.log("<><><><>guestData<><><><>",guestData)
+            console.log("<><><><>event<><><><>",event)
+            console.log("<><><><>userId<><><><>",decoded)
+
+
             // Map the Excel rows to match database fields
             const guestList = guestData.slice(1).map(row => ({
                 name: row[0],
-                mobile: row[1],
+                mobile: String(row[1]),
                 send: row[2],
-                user_id: decoded.userId,   // Associate with user_id
-                event_id: event.id,        // Associate with event_id
+                user_id: decoded?.userId ? parseInt(decoded.userId, 10) : null,
+                event_id: event?.id ? parseInt(event.id, 10) : null,
             }));
+            console.log("<><><><>guestList<><><><>",guestList)
 
             // Store each guest in the guest_lists table
             await prisma.guest_lists.createMany({

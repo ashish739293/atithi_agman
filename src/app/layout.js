@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Header from '@/components/Header';
 import Footer from "@/components/Footer";
 import './globals.css'; // Adjust the path as necessary
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout({ children }) {
   const pathname = usePathname();
@@ -33,6 +35,7 @@ export default function Layout({ children }) {
             <Footer />
           )}
         </div>
+        < ToastContainer position="top-right" autoClose={2000}/>
       </body>
     </html>
   );
