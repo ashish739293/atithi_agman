@@ -10,10 +10,8 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname);
   const isHomePage = pathname === '/';
-  console.log("+++++++++++++++==")
-  console.log(isHomePage);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -30,9 +28,15 @@ const Header = () => {
       {/* Center Navigation Links */}
       {isHomePage && (
         <div className="flex flex-grow justify-center space-x-6">
-          <a href="#what-we-offer" className="text-white text-sm font-medium hover:text-[#d4af37] transition">What We Offer</a>
-          <a href="#event" className="text-white text-sm font-medium hover:text-[#d4af37] transition">Event</a>
-          <a href="#contact-us" className="text-white text-sm font-medium hover:text-[#d4af37] transition">Contact Us</a>
+          <a href="#what-we-offer" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
+            What We Offer
+          </a>
+          <a href="#event" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
+            Event
+          </a>
+          <a href="#contact-us" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
+            Contact Us
+          </a>
         </div>
       )}
 
