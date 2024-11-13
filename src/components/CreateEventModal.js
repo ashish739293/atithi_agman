@@ -20,7 +20,8 @@ const CreateEventModal = ({ closeModal =()=>{} , event = null, fetchEvents =()=>
     if (event) {
       setTitle(event.title);
       setUsername(event.username);
-      setDate(event.date);
+
+      setDate(event.date ? new Date(event.date).toISOString().slice(0, 10) : '');
       setFile(null);
     }
   }, [event]);

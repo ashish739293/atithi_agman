@@ -153,7 +153,7 @@ const EventCard = ({ event, fetchEvents }) => {
                   Total Sent: {event.total_send}
                 </span>
               )}
-              {event.total_receive > 0 && (
+              {event.total_send > 0 && (
                 <span className="bg-[#d4af37] text-black px-3 py-1 rounded-full text-sm font-semibold">
                   Total Received: {event.total_receive}
                 </span>
