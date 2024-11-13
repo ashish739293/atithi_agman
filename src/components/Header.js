@@ -27,17 +27,27 @@ const Header = () => {
 
       {/* Center Navigation Links */}
       {isHomePage && (
-        <div className="flex flex-grow justify-center space-x-6">
-          <a href="#what-we-offer" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
-            What We Offer
-          </a>
-          <a href="#event" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
-            Event
-          </a>
-          <a href="#contact-us" className="text-white text-sm font-medium hover:text-[#d4af37] transition">
-            Contact Us
-          </a>
-        </div>
+        <div className="flex flex-grow justify-center space-x-6 flex-wrap sm:space-x-4">
+        <a 
+          href="#what-we-offer" 
+          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+        >
+          What We Offer
+        </a>
+        <a 
+          href="#event" 
+          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+        >
+          Event
+        </a>
+        <a 
+          href="#contact-us" 
+          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+        >
+          Contact Us
+        </a>
+      </div>
+      
       )}
 
       {/* Login/Signup Button */}
@@ -61,24 +71,31 @@ const Header = () => {
 
       {/* Conditional Rendering Based on Route */}
       {!isHomePage && (
-        <nav className="flex items-center space-x-4">
-          <button 
-            onClick={openModal} 
-            className="text-[#d4af37] font-medium text-sm px-4 py-1.5 rounded transition">
-            Create Event
-          </button>
-          <button className="bg-[#d4af37] text-black font-medium text-sm px-4 py-1.5 rounded-full">
-            Ongoing Events
-          </button>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search here..."
-              className="bg-white text-black pl-10 pr-4 py-2 rounded-full focus:outline-none text-sm"
-            />
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-          </div>
-        </nav>
+        <nav className="flex items-center space-x-2 md:space-x-4">
+        <button 
+          onClick={openModal} 
+          className="text-[#d4af37] font-medium text-sm px-3 md:px-4 py-1.5 rounded transition">
+          Create Event
+        </button>
+        <button className="bg-[#d4af37] text-black font-medium text-sm px-3 md:px-4 py-1.5 rounded-full">
+          Ongoing Events
+        </button>
+
+        {/* Responsive Search Bar */}
+        <div className="relative hidden md:block w-full max-w-[200px]">
+          <input
+            type="text"
+            placeholder="Search here..."
+            className="bg-white text-black pl-10 pr-4 py-2 rounded-full focus:outline-none text-sm w-full"
+          />
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+        </div>
+
+        {/* Search Icon for Mobile */}
+        <button className="md:hidden p-2 rounded-full bg-white text-black">
+          <MagnifyingGlassIcon className="h-5 w-5" />
+        </button>
+      </nav>
       )}
 
       {/* Modal for Creating Event */}
