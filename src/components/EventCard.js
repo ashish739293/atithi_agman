@@ -73,7 +73,6 @@ const EventCard = ({ event, fetchEvents }) => {
   };
 
   const handleDelete = async () => {
-    // Show confirmation dialog
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
