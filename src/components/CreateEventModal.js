@@ -4,9 +4,7 @@ import Cookies from 'js-cookie';
 import * as XLSX from "xlsx";
 import { toast } from 'react-toastify';
 
-const authToken = Cookies.get('token');
-
-console.log("<><><><><><><><><><>",authToken);
+let authToken = Cookies.get('token');
 
 const CreateEventModal = ({ closeModal =()=>{} , event = null, fetchEvents =()=>{} }) => {
   const [file, setFile] = useState(null);
@@ -16,6 +14,10 @@ const CreateEventModal = ({ closeModal =()=>{} , event = null, fetchEvents =()=>
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  if(authToken==undefined){
+    authToken = Cookies.get('token');
+  }
+  
   useEffect(() => {
     if (event) {
       setTitle(event.title);

@@ -5,7 +5,7 @@ import CreateEventModal from './CreateEventModal';
 import Swal from 'sweetalert2';
 import Cookies from 'js-cookie';
 
-const authToken = Cookies.get('token');
+var authToken = Cookies.get('token');
 
 const EventCard = ({ event, fetchEvents, admin = '' }) => {
   const [showTable, setShowTable] = useState(false);
@@ -13,7 +13,8 @@ const EventCard = ({ event, fetchEvents, admin = '' }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
   const [tableData, setTableData] = useState([]);
-  const initialLoadRef = useRef(true);  // Track initial load
+  const initialLoadRef = useRef(true); // Track initial load
+
   // Sample data for table rows
   const tableDatas = [
     { srNo: 1, name: "John Doe", mobile: "+91123456789", sent: 5, received: 3 },
@@ -57,7 +58,7 @@ const EventCard = ({ event, fetchEvents, admin = '' }) => {
 
   useEffect(() => {
     if (showTable && event?.id && !initialLoadRef.current) {
-      fetchTableData();  // Fetch table data using event.id
+      fetchTableData(); // Fetch table data using event.id
     }
     // Set the ref to false after the first render
     initialLoadRef.current = false;
@@ -178,32 +179,29 @@ const EventCard = ({ event, fetchEvents, admin = '' }) => {
               <ShareIcon className="w-4 h-4" />
               <span>Share</span>
             </button>
-
             {showCopied && (
-              <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg transition-transform duration-500 ease-in-out opacity-0 animate-fade-out">
+              <div className="absolute top-[-50px] left-1 transform -translate-x-1/2 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg transition-transform duration-500 ease-in-out opacity-0 animate-fade-out">
                 <span className="text-sm">Link Copied!</span>
               </div>
             )}
-
             {/* Animation for fade out */}
             <style jsx>{`
               @keyframes fade-out {
-                0% {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-                80% {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-                100% {
-                  opacity: 0;
-                  transform: translateY(-10px);
-                }
+              0% {
+              opacity: 1;
+              transform: translateY(0);
               }
-  
+              80% {
+              opacity: 1;
+              transform: translateY(0);
+              }
+              100% {
+              opacity: 0;
+              transform: translateY(-10px);
+              }
+              }
               .animate-fade-out {
-                animation: fade-out 2.5s forwards;
+              animation: fade-out 2.5s forwards;
               }
             `}</style>
           </div>

@@ -117,7 +117,7 @@ export async function POST(request) {
             // Store each guest in the guest_lists table
             await prisma.guest_lists.createMany({
                 data: guestList,
-                skipDuplicates: true,
+                // skipDuplicates: true,
             });
 
             // Count the number of guests added
