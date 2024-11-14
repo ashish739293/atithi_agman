@@ -50,14 +50,6 @@ export default function SignUpPage() {
         router.push('/user-dashboard'); // Redirect to the dashboard on success
       } else {
         // Handle error responses
-        // setEmail(""); // Reset email input
-        // setPassword(""); // Reset password input
-        // setName(""); // Reset name input
-        // setUsername(""); // Reset username input
-        // setMobile(""); // Reset mobile input
-        // setAddress1(""); // Reset Address1 input
-        // setAddress2(""); // Reset Address2 input
-        // setPincode(""); // Reset Pincode input
         setMessage(userData.message || userData.error); // Set error message
         setMessageType("error");
       }
@@ -68,11 +60,9 @@ export default function SignUpPage() {
     }
   };
 
-
   const goToLogin = () => {
     router.push('/login');
   };
-
 
   // Function to handle Google Sign-In (placeholder for future implementation)
   const handleGoogleSignIn = () => {
@@ -82,26 +72,30 @@ export default function SignUpPage() {
   return (
     <>
       {/* Message box for displaying feedback messages */}
-      <MessageBox
-        message={message}
-        type={messageType}
-        onClose={() => setMessage("")} // Close message box
-      />
+      <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50">
+        <MessageBox
+          message={message}
+          type={messageType}
+          onClose={() => setMessage("")}
+          className="p-4 bg-yellow-500 text-white rounded-lg shadow-lg"
+        />
+      </div>
       {/* Main container with background image */}
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: 'url("background-image.jpeg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Overlay for darkening and slightly blurring the background */}
-        <div className="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm"></div>
 
         {/* Centered login card */}
         <div className="relative w-full max-w-4xl mx-auto p-8 bg-white bg-opacity-30 backdrop-blur-sm rounded-3xl shadow-lg text-black z-10">
+          {/* Arrow button positioned outside the main content */}
           <button
             onClick={() => router.back()}
-            className="absolute top-8 left-10 bg-yellow-500 rounded-full text-white text-2xl flex items-center justify-center w-8 h-8"
+            className="absolute top-8 left-10 bg-yellow-500 rounded-full text-white text-2xl flex items-center justify-center w-8 h-8 z-20"
           >
             &#8592;
           </button>
 
-          <h1 className="text-center text-2xl font-semibold text-yellow-500 mb-4">
+          <h1 className="text-center text-2xl font-semibold text-yellow-500 mb-4 mt-12">
             Welcome on Atithi Agman
           </h1>
           
@@ -111,8 +105,8 @@ export default function SignUpPage() {
 
           <form onSubmit={handleSignup} className="space-y-4">
 
-            <div className="flex items-center justify-between mb-4 space-x-4">
-            <input
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
                 type="text"
                 placeholder="Full Name"
                 value={name}
@@ -130,9 +124,8 @@ export default function SignUpPage() {
               />
             </div>
 
-
-            <div className="flex items-center justify-between mb-4 space-x-4">
-            <input
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
                 type="text"
                 placeholder="Mobile Number"
                 value={mobile}
@@ -150,8 +143,8 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between mb-4 space-x-4">
-            <input
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
                 type="text"
                 placeholder="Username"
                 value={username}
@@ -169,8 +162,8 @@ export default function SignUpPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between mb-4 space-x-4">
-            <input
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -194,24 +187,22 @@ export default function SignUpPage() {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-1/2  px-4 py-2 text-black rounded-full"
+                className="w-full md:w-1/2 px-4 py-2 text-black rounded-full"
                 required
               />
             </div>
 
-            <div className="flex items-center justify-end mb-4">
-            <button
-              type="submit"
-              className="w-1/2 py-2 bg-yellow-500 rounded-full font-bold text-white"
-            >
-              Signup
-            </button>
+            <div className="flex items-center justify-center mb-4">
+              <button
+                type="submit"
+                className="w-full md:w-1/2 py-2 bg-yellow-500 rounded-full font-bold text-white"
+              >
+                Signup
+              </button>
             </div>
           </form>
         </div>
       </div>
-
-
     </>
   );
 }
