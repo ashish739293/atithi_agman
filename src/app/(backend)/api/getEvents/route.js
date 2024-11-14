@@ -28,11 +28,23 @@ export async function GET(request) {
             return NextResponse.json({ status: 401, message: "Invalid token or missing user data" }, { status: 401 });
         }
 
-        // Retrieve all events for the user_id from the database
+        // Get the search query from URL parameters
+        const url = new URL(request.url);
+        const searchTerm = url.searchParams.get('search') || '';
+
+        // Retrieve events for the user_id from the database
         const events = await prisma.events.findMany({
-            where: { user_id: decoded.userId },
+            where: {
+                user_id: decoded.userId,
+                ...(searchTerm && {
+                    title: {
+                        contains: searchTerm,
+                        mode: 'insensitive',
+                    },
+                }),
+            },
         });
-        
+
         if (!events || events.length === 0) {
             return NextResponse.json({ status: 404, message: "No events found for this user" }, { status: 404 });
         }

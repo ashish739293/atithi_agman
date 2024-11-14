@@ -7,14 +7,13 @@ import Cookies from 'js-cookie';
 
 const authToken = Cookies.get('token');
 
-const EventCard = ({ event, fetchEvents }) => {
+const EventCard = ({ event, fetchEvents, admin = '' }) => {
   const [showTable, setShowTable] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
   const [tableData, setTableData] = useState([]);
   const initialLoadRef = useRef(true);  // Track initial load
-
   // Sample data for table rows
   const tableDatas = [
     { srNo: 1, name: "John Doe", mobile: "+91123456789", sent: 5, received: 3 },
@@ -31,7 +30,7 @@ const EventCard = ({ event, fetchEvents }) => {
 
   // Toggle table visibility 
   const toggleTable = () => {
-    setShowTable(prevState => !prevState);   
+    setShowTable(prevState => !prevState);
   };
 
   const fetchTableData = async () => {
@@ -161,13 +160,13 @@ const EventCard = ({ event, fetchEvents }) => {
             </div>
           </div>
         </div>
-  
+
         <div className="flex flex-col items-end space-y-2 w-full sm:w-auto">
           <div className="flex items-center text-gray-500 space-x-1">
             <CalendarIcon className="w-5 h-5" />
             <span className="text-sm">{formattedDate}</span>
           </div>
-  
+
           <div className="relative">
             <button
               className="flex items-center text-gray-600 bg-gray-100 px-2 py-1 rounded-full hover:bg-gray-200 text-sm font-semibold space-x-1"
@@ -179,13 +178,13 @@ const EventCard = ({ event, fetchEvents }) => {
               <ShareIcon className="w-4 h-4" />
               <span>Share</span>
             </button>
-  
+
             {showCopied && (
               <div className="absolute top-[-50px] left-1/2 transform -translate-x-1/2 bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg transition-transform duration-500 ease-in-out opacity-0 animate-fade-out">
                 <span className="text-sm">Link Copied!</span>
               </div>
             )}
-  
+
             {/* Animation for fade out */}
             <style jsx>{`
               @keyframes fade-out {
@@ -208,8 +207,14 @@ const EventCard = ({ event, fetchEvents }) => {
               }
             `}</style>
           </div>
-  
+
           <div className="flex space-x-4">
+            {admin == 'admin' && (
+              <p>
+                Created by: <span className="font-medium">{event.username}</span>
+              </p>
+            )}
+
             <button
               className="text-red-600 font-semibold text-sm hover:text-red-700 flex items-center space-x-1"
               onClick={(e) => {
@@ -233,7 +238,7 @@ const EventCard = ({ event, fetchEvents }) => {
           </div>
         </div>
       </div>
-  
+
       {/* Table and Search Bar */}
       {showTable && (
         <div className="mt-4">
@@ -249,7 +254,7 @@ const EventCard = ({ event, fetchEvents }) => {
               placeholder="Search by name or mobile"
             />
           </div>
-  
+
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto border-collapse">
               <thead>
@@ -284,12 +289,12 @@ const EventCard = ({ event, fetchEvents }) => {
           </div>
         </div>
       )}
-  
+
       {/* Edit Event Modal */}
       {showEditModal && <CreateEventModal event={event} closeModal={closeEdit} fetchEvents={fetchEvents} />}
     </div>
   );
-  
+
 };
 
 export default EventCard;

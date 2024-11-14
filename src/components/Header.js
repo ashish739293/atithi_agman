@@ -5,16 +5,20 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import CreateEventModal from './CreateEventModal';
+import { useSearch } from '@/utils/SearchContext';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { setSearchTerm } = useSearch();
   const isHomePage = pathname === '/';
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
   return (
     <header className="flex items-center justify-between bg-black text-white p-4">
       {/* Logo and Title */}
@@ -28,40 +32,40 @@ const Header = () => {
       {/* Center Navigation Links */}
       {isHomePage && (
         <div className="flex flex-grow justify-center space-x-6 flex-wrap sm:space-x-4">
-        <a 
-          href="#what-we-offer" 
-          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
-        >
-          What We Offer
-        </a>
-        <a 
-          href="#event" 
-          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
-        >
-          Event
-        </a>
-        <a 
-          href="#contact-us" 
-          className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
-        >
-          Contact Us
-        </a>
-      </div>
-      
+          <a
+            href="#what-we-offer"
+            className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+          >
+            What We Offer
+          </a>
+          <a
+            href="#event"
+            className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+          >
+            Event
+          </a>
+          <a
+            href="#contact-us"
+            className="text-white text-sm font-medium hover:text-[#d4af37] transition mb-2 sm:mb-0"
+          >
+            Contact Us
+          </a>
+        </div>
+
       )}
 
       {/* Login/Signup Button */}
       {isHomePage && (
         <div className="flex items-center space-x-4">
           <div className="flex bg-[#d4af37] text-black font-medium text-sm rounded-md">
-            <button 
-              onClick={() => router.push('/login')} 
+            <button
+              onClick={() => router.push('/login')}
               className="pl-4 pb-1 pt-1 rounded-l-full">
               Login
             </button>
             <span className='pt-1'>/</span>
-            <button 
-              onClick={() => router.push('/register')} 
+            <button
+              onClick={() => router.push('/register')}
               className="pr-4 pb-1 pt-1 rounded-r-full">
               Signup
             </button>
@@ -72,30 +76,31 @@ const Header = () => {
       {/* Conditional Rendering Based on Route */}
       {!isHomePage && (
         <nav className="flex items-center space-x-2 md:space-x-4">
-        <button 
-          onClick={openModal} 
-          className="text-[#d4af37] font-medium text-sm px-3 md:px-4 py-1.5 rounded transition">
-          Create Event
-        </button>
-        <button className="bg-[#d4af37] text-black font-medium text-sm px-3 md:px-4 py-1.5 rounded-full">
-          Ongoing Events
-        </button>
+          <button
+            onClick={openModal}
+            className="text-[#d4af37] font-medium text-sm px-3 md:px-4 py-1.5 rounded transition">
+            Create Event
+          </button>
+          <button className="bg-[#d4af37] text-black font-medium text-sm px-3 md:px-4 py-1.5 rounded-full">
+            Ongoing Events
+          </button>
 
-        {/* Responsive Search Bar */}
-        <div className="relative hidden md:block w-full max-w-[200px]">
-          <input
-            type="text"
-            placeholder="Search here..."
-            className="bg-white text-black pl-10 pr-4 py-2 rounded-full focus:outline-none text-sm w-full"
-          />
-          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-        </div>
+          {/* Responsive Search Bar */}
+          <div className="relative hidden md:block w-full max-w-[200px]">
+            <input
+              type="text"
+              placeholder="Search here..."
+              onChange={handleSearchChange}
+              className="bg-white text-black pl-10 pr-4 py-2 rounded-full focus:outline-none text-sm w-full"
+            />
+            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          </div>
 
-        {/* Search Icon for Mobile */}
-        <button className="md:hidden p-2 rounded-full bg-white text-black">
-          <MagnifyingGlassIcon className="h-5 w-5" />
-        </button>
-      </nav>
+          {/* Search Icon for Mobile */}
+          <button className="md:hidden p-2 rounded-full bg-white text-black">
+            <MagnifyingGlassIcon className="h-5 w-5" />
+          </button>
+        </nav>
       )}
 
       {/* Modal for Creating Event */}

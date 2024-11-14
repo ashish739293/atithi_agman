@@ -2,38 +2,42 @@
 import EventCard from '../../../components/EventCard';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useSearch } from "@/utils/SearchContext";
 
 const authToken = Cookies.get('token');
 
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { searchTerm } = useSearch();
 
-  // Function to fetch events
-  const fetchEvents = async () => {
+  const fetchEvents = async (searchTerm) => {
+    setLoading(true);
     try {
-      const response = await fetch('/api/getEvents', {
+      const response = await fetch(`/api/getEvents?search=${encodeURIComponent(searchTerm)}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
       });
-
       if (response.ok) {
         const data = await response.json();
-        setEvents(data.data); // Assuming events are in `data.data`
+        setEvents(data.data);
       } else {
-        const errorData = await response.json();
-        console.log("Error fetching events:", errorData.message);
+        // const errorData = await response.json();
+        console.error("Error fetching events:", response.message);
       }
     } catch (error) {
-      console.log("Fetch events failed:", error);
+      console.error("Fetch events failed:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchEvents(searchTerm);
+  }, [searchTerm]);
   useEffect(() => {
     fetchEvents();
 
@@ -52,12 +56,12 @@ export default function Home() {
         {loading ? (
           <p className="centered-message">Loading events...</p>
         ) : events.length > 0 ? (
-        
-            events.sort((a, b) => b.id - a.id) // Sort in descending order by event.id
+
+          events.sort((a, b) => b.id - a.id) // Sort in descending order by event.id
             .map(event => (
               <EventCard key={event.id} event={event} fetchEvents={fetchEvents} />
             ))
-  
+
         ) : (
           <p className="centered-message">Event not found</p>
         )}

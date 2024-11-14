@@ -6,7 +6,6 @@ import { useMediaQuery } from 'react-responsive';
 const EventsTab = () => {
     const [activeTab, setActiveTab] = useState("Ongoing Events");
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 

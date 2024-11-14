@@ -4,6 +4,8 @@ import { FiCalendar, FiShare2, FiExternalLink } from "react-icons/fi";
 import Cookies from 'js-cookie';
 import CreateEventModal from "../CreateEventModal";
 import Swal from 'sweetalert2';
+import { useSearch } from "@/utils/SearchContext";
+import EventCard from "../EventCard";
 
 const authToken = Cookies.get('token');
 
@@ -126,7 +128,7 @@ const EventList = ({ event, fetchEvents }) => {
             </div>
 
             {showEditModal && (
-                <CreateEventModal event={event} closeEdit={handleEdit} fetchEvents={fetchEvents} />
+                <CreateEventModal event={event} closeEdit={handleEdit} fetchEvents={fetchEvents}  />
             )}
         </div>
     );
@@ -134,40 +136,48 @@ const EventList = ({ event, fetchEvents }) => {
 
 const UserEventList = () => {
     const [events, setEvents] = useState([]);
-
-    const fetchEvents = async () => {
+    const [loading, setLoading] = useState(false);
+    const { searchTerm } = useSearch();
+    
+    const fetchEvents = async (searchTerm) => {
+        setLoading(true);
         try {
-            const response = await fetch('/api/getEvents', {
+            const response = await fetch(`/api/getEvents?search=${encodeURIComponent(searchTerm)}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`,
                     'Content-Type': 'application/json',
                 },
             });
-
             if (response.ok) {
                 const data = await response.json();
                 setEvents(data.data);
             } else {
-                const errorData = await response.json();
-                console.error("Error fetching events:", errorData.message);
+                // const errorData = await response.json();
+                console.error("Error fetching events:", response.message);
             }
         } catch (error) {
             console.error("Fetch events failed:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchEvents();
-    }, [authToken]);
+        fetchEvents(searchTerm);
+    }, [searchTerm]);
 
     return (
         <div className="p-4">
-            {events.length > 0 ? (
+            {loading ? (
+                <p>Loading...</p>
+            ) : 
+            events.length > 0 ? (
                 events.map((event) => (
-                    <EventList key={event.id} event={event} fetchEvents={fetchEvents} />
+                    <EventCard key={event.id} event={event} fetchEvents={fetchEvents} admin="admin" />
                 ))
-            ) : (
+            ) 
+            : (
                 <p>No events found.</p>
             )}
         </div>
