@@ -26,10 +26,10 @@ export default function Home() {
         setEvents(data.data);
       } else {
         // const errorData = await response.json();
-        console.error("Error fetching events:", response.message);
+        console.log("Error fetching events:", response.message);
       }
     } catch (error) {
-      console.error("Fetch events failed:", error);
+      console.log("Fetch events failed:", error);
     } finally {
       setLoading(false);
     }
