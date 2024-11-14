@@ -51,7 +51,7 @@ export async function POST(request) {
 
         // Generate JWT for authenticated session
         const token = jwt.sign(
-            { userId: user_data.id, username: username, mobile: user_data.mobile },
+            { userId: user_data.id, username: username, mobile: user_data.mobile, type: user_data.type },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );

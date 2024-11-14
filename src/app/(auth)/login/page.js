@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { FaEnvelope } from "react-icons/fa"; 
 import { useRouter } from "next/navigation"; 
 import Cookies from "js-cookie";
 import MessageBox from "@/components/MessageBox";
@@ -15,11 +14,38 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Login logic here
-  };
+    try {
+      const response = await fetch('/api/signIn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const userData = await response.json();
 
-  const handleGoogleSignIn = () => {
-    console.log("Google Sign-In clicked");
+      if (response.ok) {
+        Cookies.set("token", userData.data.token, { expires: 1 });
+        Cookies.set("user_id", userData.data.id, { expires: 1 });
+        Cookies.set("name", userData.data.name, { expires: 1 });
+        Cookies.set("type", userData.data.type, { expires: 1 });
+        Cookies.set("mobile", userData.data.mobile, { expires: 1 });
+
+        setMessage(userData.message);
+        setMessageType("success");
+        let path = userData.data.type === "User" ? "/user-dashboard" : "/admin/dashboard"; 
+        router.push(path);
+      } else {
+        setUsername("");
+        setPassword("");
+        setMessage(userData?.message || userData?.error );
+        setMessageType("error");
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      setMessage("An error occurred. Please try again.");
+      setMessageType("error");
+    }
   };
 
   const goToRegister = () => {
