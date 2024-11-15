@@ -32,11 +32,18 @@ const Schema = yup.object().shape({
         .test('not-only-space', 'username cannot consist only of spaces', value => !(/^\s+$/.test(value)))
         .test('not-only-special-characters', 'username cannot consist only of special characters', value => !(/^[@_ ]+$/.test(value))),
     mobile: yup.string().matches(/^[0-9]{10}$/, 'Invalid mobile number').required("mobile is required"),
-    password: yup.string().required('password is required').min(6, 'password must be at least 6 characters').matches(/^(?![\s@!#$%^&*()_+={}[\]:";'<>?,./\\|`~])[A-Za-z\d@$!%*?&]{6,}$/, 'password in only space and spacle characters  is not valid '),
+    password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,  
+    "Password must have a letter, a number, and a special character."
+    ),
     confirmPassword: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match'),
     address1: yup.string().required('address1 is required'),
     address2: yup.string().required('address2 is required'),
-    pincode: yup.number().required('pincode is required')
+    pincode: yup.string().matches(/^[0-9]{6}$/, 'Invalid pincode number').required("Pincode is required")
 });
 
 export async function POST(request) {

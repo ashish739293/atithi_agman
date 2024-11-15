@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import Cookies from "js-cookie";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import MessageBox from "@/components/MessageBox";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); 
   const router = useRouter();
@@ -50,6 +52,10 @@ export default function LoginPage() {
 
   const goToRegister = () => {
     router.push('/register');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   return (
@@ -95,14 +101,23 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <p className="text-right text-white text-sm cursor-pointer mb-4">Forgot Password?</p>
             <button
               type="submit"
