@@ -9,7 +9,7 @@ export default function Main() {
   useEffect(() => {
     let index = 0;
     const typingInterval = setInterval(() => {
-      if (index < toType.length) {
+      if (index < toType.length -1) {
         setText((prev) => prev + toType[index]);
         index++;
       } else {
@@ -39,8 +39,7 @@ export default function Main() {
             {text}
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 lg:mb-10 px-4 sm:px-8 lg:px-12 text-white leading-relaxed">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+          Your event deserves to be extraordinary, and we're here to bring your vision to life. Whether it's a corporate gathering, a celebration, or a milestone event, we manage every detail with precision and care. Let us help you make your event a success, from start to finish.
           </p>
         </div>
       </section>
@@ -62,11 +61,7 @@ export default function Main() {
           ))}
         </div>
         <div className="mt-8 text-left text-base sm:text-lg md:text-xl lg:text-2xl px-4 sm:px-8 lg:px-12 max-w-4xl mx-auto text-white leading-relaxed">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-          standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a 
-          type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
-          the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled 
-          it to make a type specimen book.
+        From the first consultation to the final celebration, we help you organize every aspect of your event. Whether it’s selecting the perfect venue, sending invitations, or ensuring the event runs smoothly, we’ve got you covered. Let us bring your vision to life and create an unforgettable experience for you and your guests.
         </div>
       </section>
     </>
