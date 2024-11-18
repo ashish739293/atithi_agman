@@ -59,7 +59,7 @@ export default function Contact() {
           <p className="text-lg md:text-xl mb-4">Submit your contact details, and we will get back to you</p>
           <div className="flex items-center space-x-4">
             <img src="Phone_fill.png" alt="Phone" className="w-5 h-5 md:w-6 md:h-6" />
-            <span>+91 909-999-9090</span>
+            <span>+91 6351569933</span>
           </div>
           <div className="flex items-center space-x-4">
             <img src="Message_alt_fill.png" alt="Email" className="w-5 h-5 md:w-6 md:h-6" />

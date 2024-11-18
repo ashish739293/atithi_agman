@@ -18,7 +18,7 @@ export default function Events() {
                         <div className="col-span-1 md:col-span-4 text-center md:text-left">
                             <h2 className="font-script text-[32px] md:text-[40px] font-normal leading-[40px] md:leading-[50px] mb-8 text-black">Types of Events</h2>
                             <p className="mb-8 text-sm md:text-base">
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                Every moment deserves to be celebrated, and every celebration deserves to be unforgettable. Let us craft memories that last a lifetime, one event at a time.
                             </p>
                         </div>
 
@@ -34,39 +34,39 @@ export default function Events() {
                                 }}
                                 className="p-5 text-black"
                             >
-                                <SwiperSlide className="flex items-center justify-center">
+                                <SwiperSlide className="flex flex-col items-center justify-center">
+                                    <div className="mb-4 text-white px-3 py-2 text-xl sm:text-2xl font-bold bg-black rounded">
+                                        Wedding Function
+                                    </div>
                                     <div className="relative flex items-center justify-center rounded-full overflow-hidden w-full sm:w-[450px] md:w-[600px] h-[200px] border-2 border-[#020202]">
                                         <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
-                                        <div className="absolute left-1/2 transform -translate-x-1/2 text-white px-3 py-2 text-xl sm:text-2xl font-bold z-20">
-                                            Wedding Function
-                                        </div>
                                     </div>
                                 </SwiperSlide>
 
-                                <SwiperSlide className="flex items-center justify-center">
+                                <SwiperSlide className="flex flex-col items-center justify-center">
+                                    <div className="mb-4 text-white px-3 py-2 text-xl sm:text-2xl font-bold bg-black rounded">
+                                        Wedding Function
+                                    </div>
                                     <div className="relative flex items-center justify-center rounded-full overflow-hidden w-full sm:w-[450px] md:w-[600px] h-[200px] border-2 border-[#020202]">
                                         <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
-                                        <div className="absolute left-1/2 transform -translate-x-1/2 text-white px-3 py-2 text-xl sm:text-2xl font-bold z-20">
-                                            Wedding Function
-                                        </div>
                                     </div>
                                 </SwiperSlide>
 
-                                <SwiperSlide className="flex items-center justify-center">
+                                <SwiperSlide className="flex flex-col items-center justify-center">
+                                    <div className="mb-4 text-white px-3 py-2 text-xl sm:text-2xl font-bold bg-black rounded">
+                                        Wedding Function
+                                    </div>
                                     <div className="relative flex items-center justify-center rounded-full overflow-hidden w-full sm:w-[450px] md:w-[600px] h-[200px] border-2 border-[#020202]">
-                                         <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
-                                        <div className="absolute left-1/2 transform -translate-x-1/2 text-white px-3 py-2 text-xl sm:text-2xl font-bold z-20">
-                                            Wedding Function
-                                        </div>
+                                        <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
                                     </div>
                                 </SwiperSlide>
 
-                                <SwiperSlide className="flex items-center justify-center">
+                                <SwiperSlide className="flex flex-col items-center justify-center">
+                                    <div className="mb-4 text-white px-3 py-2 text-xl sm:text-2xl font-bold bg-black rounded">
+                                        Wedding Function
+                                    </div>
                                     <div className="relative flex items-center justify-center rounded-full overflow-hidden w-full sm:w-[450px] md:w-[600px] h-[200px] border-2 border-[#020202]">
-                                         <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
-                                        <div className="absolute left-1/2 transform -translate-x-1/2 text-white px-3 py-2 text-xl sm:text-2xl font-bold z-20">
-                                            Wedding Function
-                                        </div>
+                                        <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
                                     </div>
                                 </SwiperSlide>
 
