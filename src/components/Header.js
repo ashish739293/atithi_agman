@@ -18,7 +18,6 @@ const Header = () => {
   const isHomePage = pathname === '/';
 
   useEffect(() => {
-    // Only runs on the client
     setType(Cookies.get('type'));
   }, []);
 
@@ -35,12 +34,12 @@ const Header = () => {
     Cookies.remove('user_id');
     setType(null);
     router.push('/'); // Redirect to homepage after logout to refresh the header
- 
+
   };
 
-   const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
-   }
+  }
   if (type === null && !isHomePage) {
     // Optional loading state or redirect logic if needed
     return null;
@@ -141,8 +140,8 @@ const Header = () => {
                 <input
                   type="text"
                   placeholder="Search here..."
+                  onChange={handleSearchChange}
                   className="bg-white text-black pl-10 pr-4 py-2 rounded-full focus:outline-none text-sm w-full"
-                  
                 />
                 <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>

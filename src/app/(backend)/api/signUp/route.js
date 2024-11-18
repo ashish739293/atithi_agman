@@ -37,7 +37,7 @@ const Schema = yup.object().shape({
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters')
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,  
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,  
     "Password must have a letter, a number, and a special character."
     ),
     confirmPassword: yup.string().required().oneOf([yup.ref('password'), null], 'passwords must match'),
@@ -70,7 +70,7 @@ export async function POST(request) {
                     username,
                     mobile,
                     email,
-                    type: 'User',
+                    type: 'Admin',
                     password: hashedPassword,
                     pincode,
                     address_1: address1,

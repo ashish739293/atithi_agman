@@ -142,7 +142,7 @@ const UserEventList = () => {
     const fetchEvents = async (searchTerm) => {
         setLoading(true);
         try {
-            const response = await fetch(`/api/getEvents?search=${encodeURIComponent(searchTerm)}`, {
+            const response = await fetch(`/api/get-all-events?search=${encodeURIComponent(searchTerm)}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`,
