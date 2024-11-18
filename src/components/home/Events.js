@@ -69,7 +69,6 @@ export default function Events() {
                                         <Image src="/wedding.jpeg" alt="Wedding Function" width={500} height={300} className="w-full h-full object-cover rounded-full" />
                                     </div>
                                 </SwiperSlide>
-
                                 {/* Add more SwiperSlides here if needed */}
                             </Swiper>
                         </div>

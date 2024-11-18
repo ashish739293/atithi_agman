@@ -128,17 +128,17 @@ const EventList = ({ event, fetchEvents }) => {
             </div>
 
             {showEditModal && (
-                <CreateEventModal event={event} closeEdit={handleEdit} fetchEvents={fetchEvents}  />
+                <CreateEventModal event={event} closeEdit={handleEdit} fetchEvents={fetchEvents} />
             )}
         </div>
     );
 };
 
-const UserEventList = () => {
+const UserEventList = ({ activeTab }) => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
     const { searchTerm } = useSearch();
-    
+
     const fetchEvents = async (searchTerm) => {
         setLoading(true);
         try {
@@ -166,20 +166,30 @@ const UserEventList = () => {
     useEffect(() => {
         fetchEvents(searchTerm);
     }, [searchTerm]);
+    const today = new Date();
 
+    const filteredEvents = events.filter(event => {
+        const eventDate = new Date(event.date);
+        if (activeTab === "Ongoing Events") {
+            return eventDate >= today;
+        } else if (activeTab === "Completed Events") {
+            return eventDate < today;
+        }
+        return false;
+    });
     return (
         <div className="p-4">
             {loading ? (
                 <p>Loading...</p>
-            ) : 
-            events.length > 0 ? (
-                events.map((event) => (
-                    <EventCard key={event.id} event={event} fetchEvents={fetchEvents} admin="admin" />
-                ))
-            ) 
-            : (
-                <p>No events found.</p>
-            )}
+            ) :
+                filteredEvents.length > 0 ? (
+                    filteredEvents.map((event) => (
+                        <EventCard key={event.id} event={event} fetchEvents={fetchEvents} admin="admin" />
+                    ))
+                )
+                    : (
+                        <p>No events found.</p>
+                    )}
         </div>
     );
 };
