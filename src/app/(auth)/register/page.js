@@ -2,6 +2,7 @@
 
 import { useState } from "react"; // Importing useState hook from React
 import { FaEnvelope } from "react-icons/fa"; // Importing email icon from react-icons
+import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Importing useRouter hook from Next.js for navigation
 import Cookies from "js-cookie"; // Importing js-cookie for handling cookies
 import MessageBox from "@/components/MessageBox"; // Importing a custom message box component for feedback
@@ -90,9 +91,9 @@ export default function SignUpPage() {
           {/* Arrow button positioned outside the main content */}
           <button
             onClick={() => router.back()}
-            className="absolute top-8 left-10 bg-yellow-500 rounded-full text-white text-2xl flex items-center justify-center w-8 h-8 z-20"
+            className="absolute top-4 left-4 bg-yellow-500 rounded-full text-white text-xl flex items-center justify-center w-8 h-8"
           >
-            &#8592;
+            <FaArrowLeft />
           </button>
 
           <h1 className="text-center text-2xl font-semibold text-yellow-500 mb-4 mt-12">

@@ -1,46 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import MessageBox from "@/components/MessageBox";
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); 
   const router = useRouter();
 
-  const handleLogin = async (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/signIn', {
+      const response = await fetch('/api/forgotPassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email }),
       });
       const userData = await response.json();
 
       if (response.ok) {
-        Cookies.set("token", userData.data.token, { expires: 1 });
-        Cookies.set("user_id", userData.data.id, { expires: 1 });
-        Cookies.set("name", userData.data.name, { expires: 1 });
-        Cookies.set("type", userData.data.type, { expires: 1 });
-        Cookies.set("mobile", userData.data.mobile, { expires: 1 });
-
         setMessage(userData.message);
         setMessageType("success");
-        let path = userData.data.type === "User" ? "/user-dashboard" : "/admin/dashboard"; 
-        router.push(path);
+        router.push('/login'); // Redirect back to login after successful password reset
       } else {
-        setUsername("");
-        setPassword("");
+        setEmail("");
         setMessage(userData?.message || userData?.error );
         setMessageType("error");
       }
@@ -51,16 +40,8 @@ export default function LoginPage() {
     }
   };
 
-  const goToRegister = () => {
-    router.push('/register');
-  };
-
-  const goToForget = () => {
-    router.push('/forgetPassword');
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prevState) => !prevState);
+  const goToLogin = () => {
+    router.push('/login');
   };
 
   return (
@@ -78,58 +59,40 @@ export default function LoginPage() {
         {/* Overlay for darkening and slightly blurring the background */}
         <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm"></div>
 
-        {/* Centered login card with only the card background made transparent */}
+        {/* Centered forgot password card with only the card background made transparent */}
         <div className="relative w-full max-w-md mx-4 sm:mx-auto p-8 bg-white bg-opacity-30 backdrop-blur-sm rounded-xl shadow-lg text-black z-10">
-          
           <button
-            onClick={() => router.back()}
+            onClick={goToLogin}
             className="absolute top-4 left-4 bg-yellow-500 rounded-full text-white text-xl flex items-center justify-center w-8 h-8"
           >
             <FaArrowLeft />
           </button>
 
           <h1 className="text-center text-2xl font-semibold text-yellow-500 mb-6">
-            Welcome to Atithi Agman
+            Forgot Password?
           </h1>
 
-          <p className="text-right text-white cursor-pointer mb-6" onClick={goToRegister}>
-            New User? Register
+          <p className="text-right text-white cursor-pointer mb-6" onClick={goToLogin}>
+            Remembered your password? Login here
           </p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleForgotPassword} className="space-y-4">
             <div className="relative">
               <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                placeholder="Enter Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 required
               />
             </div>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                required
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <p className="text-right text-white text-sm cursor-pointer mb-4" onClick={goToForget}>Forgot Password?</p>
+
             <button
               type="submit"
               className="w-full py-2 bg-yellow-500 rounded-full font-bold text-white hover:bg-yellow-600 transition"
             >
-              Login
+              Send Reset Link
             </button>
           </form>
         </div>

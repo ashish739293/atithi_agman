@@ -3,9 +3,6 @@ import { NextResponse } from 'next/server';
 export async function middleware(request) {
     const { pathname } = request.nextUrl;
 
-    const allowedPaths = ['/api/signIn', '/api/signUp', '/api/tokenverify', '/api/contacts'];
-    const allowedPathsUI = ['/login', '/register'];
-
     const headers = new Headers(request.headers);
     headers.set('Access-Control-Allow-Origin', '*');
     headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
